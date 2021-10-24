@@ -13,6 +13,7 @@ Minha primeira API em Spring Boot um simples CRUD com mysql =D
 
 #### Configurando docker mysql
 
+    $docker volume create mysql-volume
     $docker run --name container-mysql -p3306:3306 -v mysql-volume:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=sua_senha_aqui -d mysql/mysql-server:latest
 
 #### Executando docker
