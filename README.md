@@ -18,7 +18,7 @@ Minha primeira API em Spring Boot um simples CRUD com mysql =D
 #### Executando docker
     $docker exec -it container-mysql bash
 
-####Executando mysql
+#### Executando mysql
     $mysql -u root -p
 
 #### Script mysql
