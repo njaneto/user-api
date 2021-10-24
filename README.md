@@ -11,17 +11,17 @@ Minha primeira API em Spring Boot um simples CRUD com mysql =D
 
 ## Database/Docker
 
-####Configurando docker mysql
+#### Configurando docker mysql
 
     $docker run --name container-mysql -p3306:3306 -v mysql-volume:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=sua_senha_aqui -d mysql/mysql-server:latest
 
-####Executando docker
+#### Executando docker
     $docker exec -it container-mysql bash
 
 ####Executando mysql
     $mysql -u root -p
 
-####Script mysql
+#### Script mysql
 
     --1) crir database 
         CREATE DATABASE cadastro_db;
@@ -41,7 +41,7 @@ Minha primeira API em Spring Boot um simples CRUD com mysql =D
         GRANT ALL PRIVILEGES ON *.* TO 'root'@'seu_ip_aqui';
 
 ## Start da aplicação
-###Application.properties - arquivo com as configurações do projeto como: datasource, usuário e senha de BD
+### Application.properties - arquivo com as configurações do projeto como: datasource, usuário e senha de BD
         Variaveis de ambiente 
 
         DATA_SOURCE_URL=jdbc:mysql://localhost:3306/cadastro_db?allowPublicKeyRetrieval=true&useSSL=false
