@@ -39,7 +39,7 @@ Minha primeira API em Spring Boot um simples CRUD com mysql =D
 
     --4) Dar permissao caso precise
         CREATE USER 'root'@'ip_address' IDENTIFIED BY 'sua_senha_aqui';
-        GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.17.0.1';
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'ip_address';
 
 ## Start da aplicação
 ### Application.properties - arquivo com as configurações do projeto como: datasource, usuário e senha de BD
