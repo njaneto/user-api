@@ -1,7 +1,9 @@
 package br.com.nilo.userapi.controller;
 
+import br.com.nilo.userapi.controller.dto.CadastroDTO;
 import br.com.nilo.userapi.entity.Cadastro;
 import br.com.nilo.userapi.repository.CadastroJpa;
+import br.com.nilo.userapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,50 +17,43 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private CadastroJpa cadastroJpa;
+    UserService userService;
 
     //select all
     @RequestMapping(value = "/cadastro", method = RequestMethod.GET, produces = "application/json")
     public List<Cadastro> Get() {
-        return cadastroJpa.findAll();
+
+        return userService.findAll();
+
     }
 
     //select id
     @RequestMapping(value = "/cadastro/{id}", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<Cadastro> GetById(@PathVariable(value = "id") long id) {
+    public ResponseEntity<CadastroDTO> GetById(@PathVariable(value = "id") long id) {
 
-        Optional<Cadastro> cadastro = cadastroJpa.findById(id);
-
-        if( cadastro.isPresent() ) {
-            return new ResponseEntity<Cadastro>(cadastro.get(), HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(cadastro.get(), HttpStatus.NOT_FOUND);
-    }
+        return userService.findById(id)
+                .map(CadastroDTO::new)
+                .map(dto -> new ResponseEntity<CadastroDTO>(dto,HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+   }
 
     //insert
     @RequestMapping(value = "/cadastro", method = RequestMethod.POST, produces="application/json", consumes="application/json" )
     public Cadastro Post(@Valid @RequestBody Cadastro cadastro) {
 
-        Optional<Cadastro> exist = cadastroJpa.findById(cadastro.getId());
+        return userService.save(cadastro);
 
-        if( exist.isPresent() ) {
-            return cadastroJpa.getOne(cadastro.getId());
-        }
-
-        return cadastroJpa.save(cadastro);
     }
 
     //update
     @RequestMapping(value = "/cadastro/{id}", method = RequestMethod.PUT, produces="application/json", consumes="application/json")
-    public ResponseEntity<Cadastro> Put(@PathVariable(value = "id") long id, @Valid @RequestBody Cadastro newCadastro){
+    public ResponseEntity<CadastroDTO> Put(@PathVariable(value = "id") long id, @Valid @RequestBody Cadastro newCadastro){
 
-        Optional<Cadastro> old = cadastroJpa.findById(id);
-        if ( old.isPresent() ){
-            Cadastro cadastro = old.get();
-            cadastro.setNome(newCadastro.getNome());
-            cadastroJpa.save(cadastro);
-            return new ResponseEntity<Cadastro>(cadastro, HttpStatus.OK);
+        Cadastro cadastro  = userService.put(id, newCadastro);
+        CadastroDTO dto = new CadastroDTO(cadastro);
+
+        if( dto != null ){
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -69,14 +64,12 @@ public class UserController {
     @RequestMapping(value = "/cadastro/{id}", method = RequestMethod.DELETE, produces="application/json")
     public ResponseEntity<Object> Delete(@PathVariable(value = "id") long id){
 
-        Optional<Cadastro> cadastro = cadastroJpa.findById(id);
-
-        if( cadastro.isPresent() ) {
-            cadastroJpa.delete(cadastro.get());
+        if( userService.delete( id ) ){
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
 }

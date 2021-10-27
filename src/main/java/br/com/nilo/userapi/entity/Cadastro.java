@@ -16,7 +16,7 @@ public class Cadastro {
     private long id;
 
     @ApiModelProperty(value = " Nome pessoa")
-    @Column(nullable = false)
+    @Column(nullable = false, name = "nome")
     private String nome;
 
 }
